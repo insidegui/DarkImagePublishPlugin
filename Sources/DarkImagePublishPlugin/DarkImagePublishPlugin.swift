@@ -40,16 +40,18 @@ public extension Modifier {
             if lightOnly {
                 return """
                 <figure>
-                    <img src="\(path)"\(altSuffix)>
+                    <picture>
+                        <img src="\(path)"\(altSuffix)>
+                    </picture>
                 </figure>
                 """
             } else {
                 return """
-                <figure class="dark">
-                    <img src="\(darkPath)"\(altSuffix)>
-                </figure>
-                <figure class="light">
-                    <img src="\(path)"\(altSuffix)>
+                <figure>
+                    <picture>
+                        <source srcset="\(darkPath)" media="(prefers-color-scheme: dark)">
+                        <img src="\(path)"\(altSuffix)>
+                    </picture>
                 </figure>
                 """
             }

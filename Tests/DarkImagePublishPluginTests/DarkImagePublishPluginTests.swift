@@ -8,11 +8,11 @@ final class DarkImagePublishPluginTests: XCTestCase {
         let html = parser.html(from: "![some image](/assets/img/2/1.png)")
 
         XCTAssertEqual(html, """
-        <figure class="dark">
-            <img src="/assets/img/2/1-dark.png" alt="some image">
-        </figure>
-        <figure class="light">
-            <img src="/assets/img/2/1.png" alt="some image">
+        <figure>
+            <picture>
+                <source srcset="/assets/img/2/1-dark.png" media="(prefers-color-scheme: dark)">
+                <img src="/assets/img/2/1.png" alt="some image">
+            </picture>
         </figure>
         """)
     }
@@ -23,7 +23,9 @@ final class DarkImagePublishPluginTests: XCTestCase {
 
         XCTAssertEqual(html, """
         <figure>
-            <img src="/assets/img/2/1.png" alt="some image">
+            <picture>
+                <img src="/assets/img/2/1.png" alt="some image">
+            </picture>
         </figure>
         """)
     }
