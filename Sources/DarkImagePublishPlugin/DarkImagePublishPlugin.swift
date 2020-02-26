@@ -6,7 +6,6 @@
 
 import Publish
 import Ink
-import Foundation
 
 public extension Plugin {
     static func darkImage(suffix: String = "-dark") -> Self {
@@ -19,9 +18,14 @@ public extension Plugin {
 }
 
 public extension Modifier {
+    private static let noDarkMarker = "?nodark"
+
     static func darkImage(suffix: String) -> Self {
         return Modifier(target: .images) { html, markdown in
-            let path = markdown.dropFirst("![".count).dropLast(")".count).drop(while: { $0 != "(" }).dropFirst()
+            let lightOnly = markdown.contains(Self.noDarkMarker)
+            let input = markdown.replacingOccurrences(of: Self.noDarkMarker, with: "")
+
+            let path = input.dropFirst("![".count).dropLast(")".count).drop(while: { $0 != "(" }).dropFirst()
 
             guard let dotIndex = path.lastIndex(of: ".") else { return html }
 
@@ -29,18 +33,26 @@ public extension Modifier {
             darkPath.insert(contentsOf: suffix, at: dotIndex)
 
             var altSuffix = ""
-            if let alt = markdown.firstSubstring(between: "[", and: "]") {
+            if let alt = input.firstSubstring(between: "[", and: "]") {
                 altSuffix = " alt=\"\(alt)\""
             }
 
-            return """
-            <figure class="dark">
-                <img src="\(darkPath)"\(altSuffix)>
-            </figure>
-            <figure class="light">
-                <img src="\(path)"\(altSuffix)>
-            </figure>
-            """
+            if lightOnly {
+                return """
+                <figure>
+                    <img src="\(path)"\(altSuffix)>
+                </figure>
+                """
+            } else {
+                return """
+                <figure class="dark">
+                    <img src="\(darkPath)"\(altSuffix)>
+                </figure>
+                <figure class="light">
+                    <img src="\(path)"\(altSuffix)>
+                </figure>
+                """
+            }
         }
     }
 }
