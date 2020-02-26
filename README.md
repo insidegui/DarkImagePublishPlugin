@@ -15,11 +15,11 @@ Just use the regular markdown syntax for images and the plugin takes care of the
 Becomes this in HTML:
 
 ```html
-<figure class="dark">
-    <img src="/assets/img/2/1-dark.png" alt="some image">
-</figure>
-<figure class="light">
-    <img src="/assets/img/2/1.png" alt="some image">
+<figure>
+	<picture>
+		<source srcset="/assets/img/2/1-dark.png" media="(prefers-color-scheme: dark)">
+		<img src="/assets/img/2/1.png" alt="some image">
+	</picture>
 </figure>
 ```
 
@@ -43,28 +43,6 @@ try mysite().publish(using: [
 ])
 ```
 
-## Switching between images based on system theme
-
-In order to make the images switch from light to dark and vice-versa, you can use this piece of CSS:
-
-```css
-/* Hide dark variant in light mode */
-figure.dark {
-  display:none;
-}
-
-/* Hide light variant and show dark variant in dark mode */
-@media (prefers-color-scheme: dark) {
-    figure.light {
-      display:none;
-    }
-  
-    figure.dark {
-      display:inherit;
-    }
-}
-```
-
 ## Light-only images
 
 In some cases, you might have just a single variant of an image, so trying to load the dark variant would fail. If you have an image with only a single variant, add the `?nodark` suffix to your image's path/URL:
@@ -77,6 +55,8 @@ In that case, the generated HTML will look like this:
 
 ```html
 <figure>
-    <img src="/assets/img/2/1.png" alt="some image">
+	<picture>
+		<img src="/assets/img/2/1.png" alt="some image">
+	</picture>
 </figure>
 ```
