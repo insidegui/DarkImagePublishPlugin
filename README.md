@@ -60,3 +60,19 @@ figure.dark {
     }
 }
 ```
+
+## Light-only images
+
+In some cases, you might have just a single variant of an image, so trying to load the dark variant would fail. If you have an image with only a single variant, add the `?nodark` suffix to your image's path/URL:
+
+```markdown
+![some image](/assets/img/2/1.png?nodark)
+```
+
+In that case, the generated HTML will look like this:
+
+```html
+<figure>
+    <img src="/assets/img/2/1.png" alt="some image">
+</figure>
+```
