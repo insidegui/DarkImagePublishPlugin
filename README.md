@@ -2,6 +2,10 @@
 
 A plugin for [Publish](https://github.com/JohnSundell/Publish) that lets you have two variants for images on your site: one for light mode, and one for dark mode. This is currently used in [rambo.codes](https://rambo.codes).
 
+![demo](./demo.gif)
+
+## How to use it
+
 Just use the regular markdown syntax for images and the plugin takes care of the rest, so that the following markdown:
 
 ```markdown
