@@ -27,10 +27,10 @@ public extension Modifier {
 
             guard let dotIndex = imagePath.lastIndex(of: ".") else { return html }
 
-            var darkImagePath = String(imagePath)
+            var darkImagePath = imagePath
             darkImagePath.insert(contentsOf: suffix, at: dotIndex)
 
-            let hasDarkImage = (try? context.file(at: Path(darkImagePath))) != nil
+            let hasDarkImage = (try? context.file(at: Path(String(darkImagePath)))) != nil
 
             var altSuffix = ""
             if let alt = input.firstSubstring(between: "[", and: "]") {
