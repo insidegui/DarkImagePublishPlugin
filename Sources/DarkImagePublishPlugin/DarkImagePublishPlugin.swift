@@ -30,7 +30,7 @@ public extension Modifier {
             var darkImagePath = imagePath
             darkImagePath.insert(contentsOf: suffix, at: dotIndex)
 
-            let hasDarkImage = (try? context.file(at: Path(String(darkImagePath)))) != nil
+            let hasDarkImage = (try? context.file(at: Path("/Resources\(darkImagePath)"))) != nil
 
             var altSuffix = ""
             if let alt = input.firstSubstring(between: "[", and: "]") {
