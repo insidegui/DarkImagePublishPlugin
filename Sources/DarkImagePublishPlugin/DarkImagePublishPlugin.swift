@@ -6,52 +6,52 @@
 
 import Publish
 import Ink
+import Files
 
 public extension Plugin {
     static func darkImage(suffix: String = "-dark") -> Self {
         Plugin(name: "DarkImage") { context in
             context.markdownParser.addModifier(
-                .darkImage(suffix: suffix)
+                .darkImage(suffix: suffix, context: context)
             )
         }
     }
 }
 
 public extension Modifier {
-    private static let noDarkMarker = "?nodark"
-
-    static func darkImage(suffix: String) -> Self {
+    static func darkImage<Site: Website>(suffix: String, context: PublishingContext<Site>) -> Self {
         return Modifier(target: .images) { html, markdown in
-            let lightOnly = markdown.contains(Self.noDarkMarker)
-            let input = markdown.replacingOccurrences(of: Self.noDarkMarker, with: "")
+            let input = markdown
 
-            let path = input.dropFirst("![".count).dropLast(")".count).drop(while: { $0 != "(" }).dropFirst()
+            let imagePath = input.dropFirst("![".count).dropLast(")".count).drop(while: { $0 != "(" }).dropFirst()
 
-            guard let dotIndex = path.lastIndex(of: ".") else { return html }
+            guard let dotIndex = imagePath.lastIndex(of: ".") else { return html }
 
-            var darkPath = path
-            darkPath.insert(contentsOf: suffix, at: dotIndex)
+            var darkImagePath = String(imagePath)
+            darkImagePath.insert(contentsOf: suffix, at: dotIndex)
+
+            let hasDarkImage = (try? context.file(at: Path(darkImagePath))) != nil
 
             var altSuffix = ""
             if let alt = input.firstSubstring(between: "[", and: "]") {
                 altSuffix = " alt=\"\(alt)\""
             }
 
-            if lightOnly {
+            if hasDarkImage {
                 return """
                 <figure>
-                    <picture>
-                        <img src="\(path)"\(altSuffix)>
-                    </picture>
+                <picture>
+                <source srcset="\(darkImagePath)" media="(prefers-color-scheme: dark)">
+                <img src="\(imagePath)"\(altSuffix)>
+                </picture>
                 </figure>
                 """
             } else {
                 return """
                 <figure>
-                    <picture>
-                        <source srcset="\(darkPath)" media="(prefers-color-scheme: dark)">
-                        <img src="\(path)"\(altSuffix)>
-                    </picture>
+                <picture>
+                <img src="\(imagePath)"\(altSuffix)>
+                </picture>
                 </figure>
                 """
             }
