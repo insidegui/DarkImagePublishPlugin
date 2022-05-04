@@ -1,5 +1,4 @@
 // swift-tools-version:5.6
-// The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
@@ -9,17 +8,20 @@ let package = Package(
     products: [
         .library(
             name: "DarkImagePublishPlugin",
-            targets: ["DarkImagePublishPlugin"]),
+            targets: ["DarkImagePublishPlugin"]
+        )
     ],
     dependencies: [
-        .package(url: "https://github.com/johnsundell/publish.git", from: "0.9.0"),
+        .package(url: "https://github.com/johnsundell/Publish.git", from: "0.9.0")
     ],
     targets: [
         .target(
             name: "DarkImagePublishPlugin",
-            dependencies: ["Publish"]),
+            dependencies: ["Publish"]
+        ),
         .testTarget(
             name: "DarkImagePublishPluginTests",
-            dependencies: ["DarkImagePublishPlugin"]),
+            dependencies: ["DarkImagePublishPlugin"]
+        ),
     ]
 )
